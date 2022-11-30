@@ -8,6 +8,7 @@ export const NodeUtils = {
         for (let idx in node.children) {
             let child: Node = node.children[idx]
             let name = child.name
+            
             if (name.indexOf("_") == 0) {
 
             } else if (name.indexOf("!") == 0) {
