@@ -1,0 +1,143 @@
+// Copyright (c) 2017-2020 Xiamen Yaji Software Co., Ltd.
+CCEffect %{
+  techniques:
+  - passes:
+    - vert: sprite-vs:vert
+      frag: sprite-fs:frag
+      depthStencilState:
+        depthTest: false
+        depthWrite: false
+      blendState:
+        targets:
+        - blend: true
+          blendSrc: src_alpha
+          blendDst: one_minus_src_alpha
+          blendDstAlpha: one_minus_src_alpha
+      rasterizerState:
+        cullMode: none
+      properties:
+        alphaThreshold: { value: 0.5 }
+        dilate: { value: 0.5, target: labelPlusData.y }
+        outlineThickness: { value : 0.2, target: labelPlusData.x }
+        outlineColor: { value: [0, 0, 0, 1], editor: { type: color } }
+        shadowColor: { value: [0, 0, 0, 1], editor: { type: color} }
+        shadowOffset: { value: [0, 0], target: labelPlusData.zw }
+}%
+
+CCProgram sprite-vs %{
+    precision highp float;
+    #include <builtin/uniforms/cc-global>
+    #if USE_LOCAL
+        #include <builtin/uniforms/cc-local>
+    #endif
+    in vec3 a_position;
+    in vec2 a_texCoord;
+    in vec4 a_color;
+
+    out vec4 color;
+    out vec2 uv0;
+
+    vec4 vert () {
+        vec4 pos = vec4(a_position, 1);
+
+        #if USE_LOCAL
+            pos = cc_matWorld * pos;
+        #endif
+
+        #if USE_PIXEL_ALIGNMENT
+            pos = cc_matView * pos;
+            pos.xyz = floor(pos.xyz);
+            pos = cc_matProj * pos;
+        #else
+            pos = cc_matViewProj * pos;
+        #endif
+
+        uv0 = a_texCoord;
+
+        color = a_color;
+
+        return pos;
+    }
+}%
+
+CCProgram sprite-fs %{
+    #pragma extension([GL_OES_standard_derivatives, __VERSION__ < 300])
+    precision highp float;
+    #include <builtin/internal/embedded-alpha>
+    #include <builtin/internal/alpha-test>
+
+    in vec4 color;
+
+    #if USE_TEXTURE
+        in vec2 uv0;
+        #pragma builtin(local)
+        layout(set = 2, binding = 11) uniform sampler2D cc_spriteTexture;
+    #endif
+
+    uniform args {
+        vec4 labelPlusData;
+        vec4 outlineColor;
+        vec4 shadowColor;
+    };
+
+    float median(float r, float g, float b) {
+        return max(min(r, g), min(max(r, g), b));
+    }
+
+    vec4 frag () {
+        vec4 o = vec4(1, 1, 1, 1);
+
+        float dilate = labelPlusData.y - 0.5;
+        float finalWidget = 0.5 - dilate;
+
+        #if USE_TEXTURE
+            vec4 msd = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0);
+            float dist = median(msd.r, msd.g, msd.b);
+
+            #if __VERSION__ < 300
+                #ifdef GL_OES_standard_derivatives
+                    float smoothing = fwidth(dist);
+                #else
+                    float smoothing = 0.005;
+                #endif
+            #else
+                float smoothing = fwidth(dist);
+            #endif
+
+            float alpha = 1.0;
+            #if LABEL_OUTLINE
+                float outlineThickness = labelPlusData.x;
+                alpha = smoothstep(outlineThickness - smoothing, outlineThickness + smoothing, dist);
+                float outlineFactor = smoothstep(finalWidget - smoothing, finalWidget + smoothing, dist);
+                o *= mix(vec4(outlineColor.rgb, outlineColor.a * color.a), color, outlineFactor);
+            #else
+                alpha = smoothstep(finalWidget - smoothing, finalWidget + smoothing, dist);
+                o *= color;
+            #endif
+
+            #if LABEL_SHADOW
+                vec4 shadow_msd = CCSampleWithAlphaSeparated(cc_spriteTexture, uv0 - vec2(labelPlusData.z, -labelPlusData.w));
+                float shadowDist = median(shadow_msd.r, shadow_msd.g, shadow_msd.b);
+                float shadowSmoothing = smoothing * 2.0;
+                #if LABEL_OUTLINE
+                    float shadowAlpha = smoothstep(labelPlusData.x - shadowSmoothing, labelPlusData.x + shadowSmoothing, shadowDist);
+                #else
+                    float shadowAlpha = smoothstep(finalWidget - shadowSmoothing, finalWidget + shadowSmoothing, shadowDist);
+                #endif
+                o = mix(vec4(shadowColor.rgb, shadowColor.a * shadowAlpha * color.a), o, alpha);
+            #else
+                o.a *= alpha;
+            #endif
+
+            #if IS_GRAY
+                float gray  = 0.2126 * o.r + 0.7152 * o.g + 0.0722 * o.b;
+                o.r = o.g = o.b = gray;
+            #endif
+
+        #endif
+
+        ALPHA_TEST(o);
+
+        return o;
+    }
+}%

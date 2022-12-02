@@ -1,0 +1,124 @@
+:host {
+    display: flex;
+}
+
+.panel {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 8px;
+    overflow: auto;
+}
+
+.panel>.settings {
+    width: 33%;
+    margin-left: 6px;
+    padding: 4px;
+    border: 1px solid var(--color-normal-border-weaker);
+    border-radius: calc(var(--size-normal-radius) * 1px);
+    overflow: auto;
+    user-select: text;
+}
+
+.panel>.content {
+    flex: 1;
+    margin-left: 6px;
+    margin-right: 6px;
+    padding: 4px;
+    border: 1px solid var(--color-normal-border-weaker);
+    border-radius: calc(var(--size-normal-radius) * 1px);
+    overflow: auto;
+    user-select: text;
+}
+
+.panel>.content .preview {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* @media only screen and (max-width: 500px) {
+    .panel {
+        flex-direction: column;
+    }
+    .panel>.settings {
+        width: auto;
+        margin-right: 6px;
+    }
+} */
+
+.panel>.settings .section {
+    display: block;
+    margin-bottom: 16px;
+    user-select: text;
+}
+
+.panel>.settings .row {
+    margin: 16px 0;
+    user-select: text;
+}
+
+.panel>.settings h2,
+.panel>.settings h3,
+.panel>.settings h4,
+.panel>.settings h5 {
+    padding-bottom: 8px;
+}
+
+.panel>.settings .mb-10 {
+    margin-bottom: 10px;
+}
+
+.panel .ui-checkbox-wrap ui-checkbox {
+    margin-right: 20px;
+}
+.panel ui-select {
+    width: 100%;
+}
+
+.panel ui-color,
+.panel ui-file,
+.panel ui-gradient,
+.panel ui-input,
+.panel ui-num-input,
+.panel ui-slider,
+.panel ui-node,
+.panel ui-component,
+.panel ui-asset {
+    width: 100%;
+}
+
+.panel .ui-drag-wrap ui-drag-item {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 15px;
+    background-color: var(--color-normal-fill-important);
+}
+
+.panel .ui-drag-wrap ui-drag-area {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 15px;
+    border: dashed 1px var(--color-normal-border-important);
+}
+
+.panel .ui-drag-wrap ui-drag-area[hoving] {
+    border-color: var(--color-success-border);
+}
+
+.panel .ui-icon-wrap .icon-box {
+    display: inline-block;
+    width: 160px;
+    font-size: 12px;
+}
+
+.panel .dialog-wrap ui-button {
+    margin-right: 20px;
+}
+
+img[src=""],img:not([src])
+{
+    opacity: 0;
+}

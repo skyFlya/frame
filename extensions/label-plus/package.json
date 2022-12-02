@@ -1,0 +1,160 @@
+{
+    "package_version": 2,
+    "version": "1.2.0",
+    "name": "label-plus",
+    "description": "i18n:label-plus.description",
+    "main": "./dist/main.js",
+    "dependencies": {
+        "fs-extra": "^10.0.0",
+        "msdf-bmfont-cocos": "https://github.com/yanjifa/msdf-bmfont-cocos.git"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^9.0.5",
+        "@types/node": "^16.0.1"
+    },
+    "panels": {
+        "default": {
+            "title": "i18n:label-plus.panel_title",
+            "type": "dockable",
+            "icon": "static/icon.png",
+            "main": "dist/panels/default",
+            "size": {
+                "min-width": 300,
+                "min-height": 500,
+                "width": 1160,
+                "height": 800
+            }
+        }
+    },
+    "contributions": {
+        "menu": [
+            {
+                "path": "i18n:menu.extension",
+                "label": "i18n:label-plus.open_panel",
+                "icon": "static/icon.png",
+                "message": "open-panel"
+            },
+            {
+                "path": "i18n:menu.extension/i18n:label-plus.menu",
+                "label": "i18n:label-plus.comp_setting",
+                "message": "comp-setting"
+            },
+            {
+                "path": "i18n:menu.extension/i18n:label-plus.menu",
+                "label": "i18n:label-plus.fix_preview",
+                "message": "fix-simulator-preview"
+            },
+            {
+                "path": "i18n:menu.node",
+                "group": "create",
+                "label": "i18n:label-plus.title"
+            },
+            {
+                "path": "i18n:menu.node/i18n:label-plus.title",
+                "label": "i18n:label-plus.comp_name",
+                "params": [
+                    {
+                        "name": "LabelPlus",
+                        "assetUuid": "6186edf7-1185-42a2-abb2-50cfc3fe2898",
+                        "canvasRequired": true
+                    }
+                ],
+                "message": "create-node"
+            }
+        ],
+        "messages": {
+            "open-panel": {
+                "methods": [
+                    "openPanel"
+                ]
+            },
+            "comp-setting": {
+                "methods": [
+                    "openCompSetting"
+                ]
+            },
+            "fix-simulator-preview": {
+                "methods": [
+                    "fixSimulatorPreview"
+                ]
+            },
+            "create-node": {
+                "methods": [
+                    "createNode"
+                ]
+            },
+            "gen-bmfont": {
+                "methods": [
+                    "genBMfont"
+                ]
+            },
+            "save-bmfont": {
+                "methods": [
+                    "saveBMFont"
+                ]
+            },
+            "on-progress": {
+                "methods": [
+                    "default.onProgress"
+                ]
+            },
+            "default-font-changed": {
+                "methods": [
+                    "onDefaultFontChanged"
+                ]
+            },
+            "before-panel-close": {
+                "methods": [
+                    "beforePanelClose"
+                ]
+            }
+        },
+        "asset-db": {
+            "mount": {
+                "path": "./assets",
+                "readonly": true
+            }
+        },
+        "inspector": {
+            "section": {
+                "node": {
+                    "LabelPlus": "./static/inspector/label-plus.js"
+                }
+            }
+        },
+        "scene": {
+            "script": "./dist/editor-material-loader.js"
+        },
+        "profile": {
+            "project": {
+                "defaultFont": {
+                    "default": "ce349d92-def5-420b-b15a-b011008bb46e",
+                    "message": "default-font-changed",
+                    "label": "i18n:label-plus.default_font"
+                },
+                "genConfig": {
+                    "default": null
+                }
+            }
+        },
+        "project": {
+            "comp-setting": {
+                "label": "i18n:label-plus.comp_setting",
+                "content": {
+                    "defaultFont": {
+                        "ui": "ui-asset",
+                        "attributes": {
+                            "droppable": "cc.BitmapFont"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "author": "yanjifa2013@qq.com",
+    "editor": ">=3.5.0",
+    "scripts": {
+        "build": "tsc -b",
+        "watch": "tsc -w"
+    }
+}

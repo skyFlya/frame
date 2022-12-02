@@ -1,0 +1,92 @@
+<div id="generate-panel" class="panel">
+    <div id="setting-panel" class="settings">
+        <div class="wrap">
+            <ui-section expand="" header="BMFont Settings" class="config section">
+                <div class="row">
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.font_file" slot="label" value="Source Font File"></ui-label>
+                        <ui-asset id="font" slot="content" droppable="cc.TTFFont"></ui-asset>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.font_size" slot="label" value="Font Size"></ui-label>
+                        <ui-num-input id="font-size" slot="content" value="32" step="1" min="16"></ui-num-input>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.padding" slot="label" value="Padding"></ui-label>
+                        <ui-num-input id="padding" slot="content" value="2" step="1" min="0"></ui-num-input>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.texture_size" slot="label" value="Texture Size"></ui-label>
+                        <ui-select id="texture-width" slot="content" value="2048" style="margin-right: 2px;">
+                            <option value="256">256</option>
+                            <option value="512">512</option>
+                            <option value="1024">1024</option>
+                            <option value="2048">2048</option>
+                            <option value="4096">4096</option>
+                        </ui-select>
+                        <ui-button id="link-button" class="transparent icon-button" slot="content" style="flex: 0 1 auto;">
+                            <ui-icon value="link" ></ui-icon>
+                        </ui-button>
+                        <ui-select id="texture-height" slot="content" value="2048" style="margin-left: 2px;">
+                            <option value="256">256</option>
+                            <option value="512">512</option>
+                            <option value="1024">1024</option>
+                            <option value="2048">2048</option>
+                            <option value="4096">4096</option>
+                        </ui-select>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.kerning" slot="label" value="Kerning Info"></ui-label>
+                        <ui-checkbox id="kerning" slot="content" value="true"></ui-checkbox>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.smart_size" slot="label" value="Smart Size"></ui-label>
+                        <ui-checkbox id="smart-size" slot="content" value="true"></ui-checkbox>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.charset" slot="label" value="Character Set"></ui-label>
+                        <ui-select id="charset-type" slot="content" value="custom"">
+                            <option value="custom">Custom</option>
+                            <option value="file">From File</option>
+                        </ui-select>
+                    </ui-prop>
+                    <ui-prop id="file-content" class="mb-10" hidden="true" >
+                        <ui-label tooltip="i18n:label-plus.generate.charset_file" slot="label" value="Character File"></ui-label>
+                        <ui-asset id="txt-file" slot="content" droppable="cc.TextAsset"></ui-asset>
+                    </ui-prop>
+                    <ui-textarea id="txt-area" slot="content" style="margin-bottom: 10px;" value=" !&quot;#$%&amp;'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~"></ui-textarea>
+                </div>
+            </ui-section>
+            <ui-section expand="" header="SDF Settings" class="config section">
+                <div class="row">
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.range" slot="label" value="Distance Range"></ui-label>
+                        <ui-num-input id="range" slot="content" value="4" step="1" min="2"></ui-num-input>
+                    </ui-prop>
+                    <ui-prop class="mb-10">
+                        <ui-label tooltip="i18n:label-plus.generate.field_type" slot="label" value="FieldType"></ui-label>
+                        <ui-select id="field-type" slot="content" value="msdf"">
+                            <option value="msdf">MSDF</option>
+                            <option value="sdf">SDF</option>
+                            <option value="mtsdf">MTSDF</option>
+                        </ui-select>
+                    </ui-prop>
+                </div>
+            </ui-section>
+            <ui-prop id="progress-ui" class="mb-10">
+                <ui-progress id="progress-bar" value="0" style="width: 100%;"></ui-progress>
+            </ui-prop>
+            <ui-prop class="mb-10">
+                <ui-button id="gen-btn" style="width: 100%;" disabled >Generate SDF BMFont</ui-button>
+            </ui-prop>
+            <ui-prop class="mb-10">
+                <ui-button id="save-btn" style="width: 100%;" disabled >Save as...</ui-button>
+            </ui-prop>
+        </div>
+    </div>
+    <div id="content-panel" class="content">
+        <div>
+            <img id="preview-img" class="preview" ></img>
+        </div>
+    </div>
+</div>

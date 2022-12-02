@@ -190,12 +190,12 @@ export class UIMgr extends Component {
         uiBase.node.setSiblingIndex(cfg.zIndex);
         uiBase.show(() => { });
         callback && callback(uiBase);
-        EventMgr.emit(EventIDCfg.PANNLE_SHOW, {name: name});
+        App.EventMgr.emit(EventIDCfg.PANNLE_SHOW, {name: name});
     }
 
     private closeAndShowNext(uiBase: UIBase, name: string, tryShowNext: boolean, callback: (uiBase: UIBase) => void): void {
         callback && callback(uiBase);
-        EventMgr.emit(EventIDCfg.PANNEL_CLOSE, {name: name});
+        App.EventMgr.emit(EventIDCfg.PANNEL_CLOSE, {name: name});
         tryShowNext && this.tryShowNextUI();
     }
 

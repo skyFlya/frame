@@ -1,0 +1,41 @@
+{
+    "package_version": 2,
+    "version": "1.0.0",
+    "name": "translationtools",
+    "description": "i18n:translationtools.description",
+    "main": "./dist/main.js",
+    "panels": {
+        "language": {
+            "title": "i18n:translationtools.translationTools",
+            "main": "./panels/language.js",
+            "size":{
+                "width":400,
+                "height":800
+            }
+        }
+    },
+    "devDependencies": {
+        "@types/node": "^16.0.1",
+        "typescript": "^4.3.4"
+    },
+    "author": "yilele",
+    "editor": ">=3.0.0",
+    "contributions": {
+        "menu": [
+            {
+                "path": "i18n:menu.extension",
+                "label": "i18n:translationtools.translationTools",
+                "message": "openPanel"
+            }
+        ],
+        "messages": {
+            "openPanel": {
+                "methods": ["openPanel"]
+            }
+        }
+    },
+    "scripts": {
+        "build": "tsc -b",
+        "watch": "tsc -w"
+    }
+}
