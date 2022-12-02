@@ -1317,6 +1317,10 @@
       "__uuid__": "5684cf4b-c678-4fa3-b896-b17db66cfcdc",
       "__expectedType__": "cc.Prefab"
     },
+    "candyRemoveEf": {
+      "__uuid__": "cc56cdb4-8d1e-4239-bba5-00888b0b0dd1",
+      "__expectedType__": "cc.Prefab"
+    },
     "cashoutRed": {
       "__id__": 23
     },

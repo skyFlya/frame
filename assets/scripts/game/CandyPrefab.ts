@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, SpriteFrame, Sprite, tween, Vec2, Vec3, UITransform, v3 } from 'cc';
+import { _decorator, Component, Node, SpriteFrame, Sprite, tween, Vec2, Vec3, UITransform, v3, UIOpacity, Tween } from 'cc';
 import { App } from '../app/App';
 import { EventIDCfg } from '../frame/EventIDCfg';
 const { ccclass, property } = _decorator;
@@ -12,8 +12,8 @@ export class CandyPrefab extends Component {
     @property(Sprite)
     private candySpr: Sprite = null;
 
-    @property(Node)
-    private redNode: Node = null;
+    @property(UIOpacity)
+    private tipIcon: UIOpacity = null;
 
     private startType;      //当前颜色
 
@@ -36,12 +36,8 @@ export class CandyPrefab extends Component {
         this.node.setPosition(this.getPos(x, y));
     }
 
-    //移动糖果位置
-    public goTo(x, y, delay, needTime = 0.1) {
-        // this.node.runAction(sequence(
-        //     delayTime(delay),
-        //     cc.moveTo(needTime, cc.v2((x - 5) * this.candySize + this.candySize / 2, (y - 5) * this.candySize + this.candySize / 2))
-        // ));
+    //移动糖果位置，这个一般初始化棋盘采用
+    public hzGo(x, y, delay, needTime = 0.1) {
         tween(this.node).delay(delay)
             .to(needTime, { position: this.getPos(x, y) })
             .start();
@@ -64,19 +60,31 @@ export class CandyPrefab extends Component {
         // }, delay * 1000);        
 
         tween(this.node).delay(delay1).call(() => {
-            App.EventMgr.emit(EventIDCfg.RED_GOTO_CASHOUT, this.node.getComponent(UITransform).convertToWorldSpaceAR(v3(0, 0, 0)), delay2);
+            App.EventMgr.emit(EventIDCfg.CANDY_REMOVE, this.node.getComponent(UITransform).convertToWorldSpaceAR(v3(0, 0, 0)), delay2);
             this.node.destroy();
-        }).start();        
+        }).start();
     }
 
     //移动糖果位置时,先往上抖一下
-    public moveTo(x, y, delay) {
+    public vtGo(x, y, delay) {
         tween(this.node).delay(delay)
             .by(0.1, { position: new Vec3(0, 20) })
             .to(0.1, { position: this.getPos(x, y) })
             .start();
     }
 
+    //显示提示
+    public tip() {
+        tween(this.tipIcon).repeat(4, tween().to(0.5, { opacity: 255 }).to(0.5, { opacity: 0 })).start();
+    }
+
+    //停止提示
+    public stopTip() {
+        Tween.stopAllByTarget(this.tipIcon)
+        this.tipIcon.opacity = 0;
+    }
+
+    //根据x,y获取位置
     public getPos(x, y): Vec3 {
         return new Vec3(x * this.candySize + this.candySize / 2, y * this.candySize + this.candySize / 2)
     }

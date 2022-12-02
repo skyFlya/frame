@@ -19,10 +19,17 @@ export class GameScene extends Component {
 
     private gridList = [];      //存储颜色
 
-    private sameCandy = {
+    private noClick = false;    //禁止点击
+
+    private tipTime = 5;
+    private recordTipTime = 0;
+
+    private sameCandy = {           //相同颜色
         select: false,
         connectCandy: []
     };
+
+    private tipSameCandy = [];      //提示相同的糖果
 
     onLoad() {
         NodeUtils.autoBindNode(this.node, this);
@@ -42,7 +49,11 @@ export class GameScene extends Component {
     }
 
     update(deltaTime: number) {
-
+        this.recordTipTime += deltaTime;
+        if (this.recordTipTime > 5) {
+            this.recordTipTime = 0;
+            this.gameTip();
+        }
     }
 
 
@@ -63,7 +74,7 @@ export class GameScene extends Component {
                 let candyNode = self.getCandy();
                 let candy: CandyPrefab = candyNode.getComponent(CandyPrefab);
                 candy.setGridXY(i, j);
-                candy.goTo(i, j, 0, 0.3);
+                candy.hzGo(i, j, 0, 0.3);
                 var color = Math.floor(Math.random() * 2);
                 candy.setType(color);
                 candyList[i][j] = candyNode;
@@ -83,6 +94,10 @@ export class GameScene extends Component {
 
     //点击
     private onClick(e) {
+        if (this.noClick) return;
+        this.noClick = true;
+        this.stopGameTip();
+
         let touchPos = e.touch.getLocation();
         var pos = MathUtils.worldToNode(new Vec3(touchPos.x, touchPos.y, 0), this.ndCandyNode);
         this.touchStar(parseInt(String(pos.x / 68)), parseInt(String(pos.y / 68)));
@@ -100,6 +115,12 @@ export class GameScene extends Component {
                 //消除糖果
                 self.cleanOnce();
             }
+            else{
+                this.noClick = false;
+            }
+        }
+        else{
+            this.noClick = false;
         }
     }
 
@@ -171,15 +192,15 @@ export class GameScene extends Component {
             var initPosition = self.sameCandy.connectCandy[0]; //分数飘动的初始位置
             var score = (Math.pow(connectLength, 2) * 5) / connectLength;
 
-            let removeTime = 50;
-            if(connectLength <= 4){
+            let removeTime = 32;
+            if (connectLength <= 4) {
                 removeTime = 16;
             }
 
             for (var i = connectLength - 1; i >= 0; i--) {
                 var candy = self.sameCandy.connectCandy[i];
-                self.gridList[candy[0]][candy[1]] = 99;                    
-                self.candyList[candy[0]][candy[1]].getComponent(CandyPrefab).clear(i / removeTime, (connectLength - 1) / removeTime);     
+                self.gridList[candy[0]][candy[1]] = 99;
+                self.candyList[candy[0]][candy[1]].getComponent(CandyPrefab).clear(i / removeTime, (connectLength - 1) / removeTime);
                 self.candyList[candy[0]][candy[1]] = null;
 
                 //分数飘动                
@@ -195,12 +216,14 @@ export class GameScene extends Component {
                             if (self.checkOver()) {
                                 self.overCal();
                             }
+                            this.noClick = false;
                         }, 500);
                     }, (connectLength - 1) / removeTime + 0.3)
                 }
             }
         }
         else {
+            this.noClick = false;
             //Global.playMusic("Click");
         }
     }
@@ -224,7 +247,7 @@ export class GameScene extends Component {
                 if (fallDistance > 0 && self.gridList[x][y] < 99) {
                     self.gridList[x][y - fallDistance] = self.gridList[x][y];
                     self.gridList[x][y] = 99;
-                    self.candyList[x][y].getComponent(CandyPrefab).moveTo(x, y - fallDistance, 0);
+                    self.candyList[x][y].getComponent(CandyPrefab).vtGo(x, y - fallDistance, 0);
                     self.candyList[x][y - fallDistance] = self.candyList[x][y];
                     self.candyList[x][y] = null;
                 }
@@ -250,7 +273,7 @@ export class GameScene extends Component {
                     if (self.gridList[x][y] < 99) {
                         self.gridList[x - fallLeftDistance][y] = self.gridList[x][y];
                         self.gridList[x][y] = 99;
-                        self.candyList[x][y].getComponent(CandyPrefab).goTo(x - fallLeftDistance, y, 0.3);
+                        self.candyList[x][y].getComponent(CandyPrefab).hzGo(x - fallLeftDistance, y, 0.3);
                         self.candyList[x - fallLeftDistance][y] = self.candyList[x][y];
                         self.candyList[x][y] = null;
                     } else {
@@ -263,31 +286,88 @@ export class GameScene extends Component {
 
     //判断游戏是否结束
     private checkOver() {
-        if(this.checkGameCandy()){
+        if (this.checkGameCandy()) {
             return false;
         }
         return true;
     }
 
+    //游戏提示
+    private gameTip() {
+        let self = this;
+        let pos = this.checkGameCandy(true);        
+        if (pos) {
+            self.sameCandy.connectCandy = [[pos.x, pos.y]];
+            self.checkStar(pos.x, pos.y);
+            var connectLength = self.sameCandy.connectCandy.length;
+            if (connectLength > 1) {
+                for (var i = connectLength - 1; i >= 0; i--) {
+                    var candy = self.sameCandy.connectCandy[i];
+                    if (self.gridList[candy[0]][candy[1]] != 99) {
+                        self.candyList[candy[0]][candy[1]].getComponent(CandyPrefab).tip();
+                    }
+                }
+            }
+        }
+        this.tipSameCandy = self.sameCandy.connectCandy;
+    }
+
+    //停止提示
+    private stopGameTip() {
+        this.recordTipTime = 0;
+        if (this.tipSameCandy && this.tipSameCandy.length > 1) {
+            for (var i = this.tipSameCandy.length - 1; i >= 0; i--) {
+                var candy = this.tipSameCandy[i];
+                if (this.gridList[candy[0]][candy[1]] != 99) {
+                    this.candyList[candy[0]][candy[1]].getComponent(CandyPrefab).stopTip();
+                }
+            }
+            this.tipSameCandy = null;
+        }
+    }
+
     //检查游戏内是否有可消除对象
-    private checkGameCandy(){
+    private checkGameCandy(isTip = false) {
         let self = this;
         var max = Global.gridLength;
-        // 先遍历列，效率高一些，因为如果一个糖果为空，那上面一定没有糖果了
-        for (var x = 0; x < max; x++) {
-            for (var y = 0; y < max; y++) {
-                var starType = self.gridList[x][y];
-                if (starType == 99) {
-                    break;
+
+        if (isTip) {
+            //提示需要从左上开始
+            for (var x = 0; x < max; x++) {
+                for (var y = max - 1; y >= 0; y--) {
+                    let starType = self.gridList[x][y];
+                    if (starType != 99) {
+                        // 要扫描的4个糖果（上下左右）
+                        let scanStar = [[x + 1, y], [x - 1, y], [x, y - 1], [x, y + 1]];
+                        for (var i = 0; i < scanStar.length; i++) {
+                            // 如果被扫描的4个中有相连的，就直接返回false
+                            var tmpX = scanStar[i][0];
+                            var tmpY = scanStar[i][1];
+                            if (self.inGrid(tmpX, tmpY) && self.gridList[tmpX][tmpY] == starType) {
+                                return { x: x, y: y };
+                            }
+                        }
+                    }
                 }
-                // 要扫描的4个糖果（上下左右）
-                var scanStar = [[x + 1, y], [x - 1, y], [x, y - 1], [x, y + 1]];
-                for (var i = 0; i < scanStar.length; i++) {
-                    // 如果被扫描的4个中有相连的，就直接返回false
-                    var tmpX = scanStar[i][0];
-                    var tmpY = scanStar[i][1];
-                    if (self.inGrid(tmpX, tmpY) && self.gridList[tmpX][tmpY] == starType) {
-                        return {x: tmpX, tmpY};
+            }
+        }
+        else {
+            // 先遍历列，效率高一些，因为如果一个糖果为空，那上面一定没有糖果了
+            for (var x = 0; x < max; x++) {
+                for (var y = 0; y < max; y++) {
+                    let starType = self.gridList[x][y];
+                    if (starType == 99) {
+                        break;
+                    }
+                    // 要扫描的4个糖果（上下左右）
+                    let scanStar = [[x + 1, y], [x - 1, y], [x, y - 1], [x, y + 1]];
+                    for (var i = 0; i < scanStar.length; i++) {
+                        // 如果被扫描的4个中有相连的，就直接返回false
+                        var tmpX = scanStar[i][0];
+                        var tmpY = scanStar[i][1];
+                        if (self.inGrid(tmpX, tmpY) && self.gridList[tmpX][tmpY] == starType) {
+                            return { x: tmpX, y: tmpY };
+                        }
                     }
                 }
             }
