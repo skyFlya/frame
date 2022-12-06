@@ -34,13 +34,13 @@ export let UICfg = {
     /**
      * 提示框2
      */
-    'PannelTip2': {
-        name: 'PannelTip2',
+    'PannelSet': {
+        name: 'PannelSet',
         preloadRes: [
-            { url: 'common/pannels2048/PannelTip2', type: Prefab }
+            { url: 'pannels/PannelSet', type: Prefab }
         ],
-        ui: 'common/pannels2048/PannelTip2',
+        ui: 'pannels/PannelSet',
         needWait: false,
-        zIndex: UIZIndexCfg.REWARD,
+        zIndex: UIZIndexCfg.DEFAULT,
     },
 }

@@ -1,28 +1,18 @@
-// Learn cc.Class:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/class.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/en/scripting/life-cycle-callbacks.html
-
 import { _decorator, Prefab, Node, instantiate, NodePool } from "cc";
 const { ccclass, property } = _decorator;
 
-@ccclass("PoolManager")
-export class PoolManager {
+@ccclass("PoolMgr")
+export class PoolMgr {
     dictPool: { [name: string]: NodePool }= {}
     dictPrefab: { [name: string]: Prefab } = {}
 
-    static _instance: PoolManager;
+    static _instance: PoolMgr;
 
-    public static getInstance(): PoolManager {
-        if (PoolManager._instance == null) {
-            PoolManager._instance = new PoolManager();
+    public static getInstance(): PoolMgr {
+        if (PoolMgr._instance == null) {
+            PoolMgr._instance = new PoolMgr();
         }
-        return PoolManager._instance;
+        return PoolMgr._instance;
     }
 
     /**

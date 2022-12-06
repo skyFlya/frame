@@ -32,17 +32,11 @@ class SaveConfig {
         type: "string",
         default: null
     }
-    /**bgm开关 */
-    bgmVolume: SaveItemConig = {
-        key: "bgmVolume",
-        type: "number",
-        default: 0.8
-    }
-    /**音效音量 */
-    effectVolume: SaveItemConig = {
-        key: "effectVolume",
-        type: "number",
-        default: 0.8
+    /**音乐开关 */
+    bgmSwitch: SaveItemConig = {
+        key: "bgmSwitch",
+        type: "object",
+        default: {music: true, sound:true}
     }
 
     /**游戏时间 */

@@ -1,10 +1,9 @@
 import { _decorator, Component, Node, Prefab, UITransform, v3, Vec3, CCObject, Sprite, DEFAULT_OCTREE_DEPTH, Layers } from 'cc';
-import { NodeUtils } from '../frame/NodeUtils';
 import { App } from '../app/App';
 import { CandyPrefab } from './CandyPrefab';
 import { Global } from './Global';
-import { MathUtils } from '../frame/MathUtils';
-import { EventIDCfg } from '../frame/EventIDCfg';
+import { MathUtils } from '../frame/utils/MathUtils';
+import { NodeUtils } from '../frame/utils/NodeUtils';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameScene')
@@ -89,7 +88,7 @@ export class GameScene extends Component {
 
     //获取糖果
     private getCandy() {
-        return App.poolManager.getNode(this.candyPre, this.ndCandyNode);
+        return App.poolMgr.getNode(this.candyPre, this.ndCandyNode);
     }
 
     //点击
@@ -401,7 +400,7 @@ export class GameScene extends Component {
                     if (i == remainStartLength - 1) {
                         setTimeout(() => {
                             //Global.playMusic("ClearStart");
-                            //self.scoreManage.goToAllScore(0, 0);
+                            //self.scoreManage.goToAllScore(0, 0);                            
                         }, 4000)
                     }
                 }

@@ -1,11 +1,16 @@
-import { UICfgMgr } from "../frame/UICfgMgr";
-import { UIMgr } from "../frame/UIMgr";
-import { PoolManager } from "../frame/PoolManager";
-import { EventMgr } from "../frame/EventMgr";
+import { EventMgr } from "../frame/Mgr/EventMgr";
+import { HttpClientMgr } from "../frame/Mgr/HttpClientMgr";
+import { PoolMgr } from "../frame/Mgr/PoolMgr";
+import { SaveMgr } from "../frame/Mgr/SaveMgr";
+import { SoundMgr } from "../frame/Mgr/SoundMgr";
+import { UICfgMgr } from "../frame/Mgr/UICfgMgr";
+import { UIMgr } from "../frame/Mgr/UIMgr";
+import { WebViewMgr } from "../frame/Mgr/WebViewMgr";
+
 
 
 export class App {
-
+    
     public static get uiMgr(): UIMgr {
         return UIMgr.getInstance();
     }
@@ -18,7 +23,24 @@ export class App {
         return EventMgr.getInstance();
     }
 
-    public static get poolManager(): PoolManager {
-        return PoolManager.getInstance();
+    public static get poolMgr(): PoolMgr {
+        return PoolMgr.getInstance();
     }
+
+    public static get saveManager(): SaveMgr {
+        return SaveMgr.getInstance();
+    }
+
+    public static get soundMgr(): SoundMgr{
+        return SoundMgr.getInstance();
+    }
+
+    public static get webViewMgr(): WebViewMgr{
+        return WebViewMgr.getInstance();
+    }
+    
+    public static get httpClientMgr(): HttpClientMgr{
+        return HttpClientMgr.getInstance();
+    }
+
 }

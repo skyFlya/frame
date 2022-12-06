@@ -1,8 +1,9 @@
-import { _decorator, Component, Node, error, isValid, loader, resources, Prefab, instantiate, log, find } from 'cc';
-import { App } from '../app/App';
-import { EventIDCfg } from './EventIDCfg';
-import { EventMgr } from './EventMgr';
-import { UIBase } from './UIBase';
+import { _decorator, Component, Node, error, isValid, Prefab, instantiate, log, find } from 'cc';
+import { App } from '../../app/App';
+import { EventIDCfg } from '../const/EventIDCfg';
+import { UIBase } from '../UIBase';
+import { ObjectUtils } from '../utils/ObjectUtils';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('UIMgr')
@@ -190,12 +191,12 @@ export class UIMgr extends Component {
         uiBase.node.setSiblingIndex(cfg.zIndex);
         uiBase.show(() => { });
         callback && callback(uiBase);
-        App.EventMgr.emit(EventIDCfg.PANNLE_SHOW, {name: name});
+        App.EventMgr.emit(EventIDCfg.PANNLE_SHOW, { name: name });
     }
 
     private closeAndShowNext(uiBase: UIBase, name: string, tryShowNext: boolean, callback: (uiBase: UIBase) => void): void {
         callback && callback(uiBase);
-        App.EventMgr.emit(EventIDCfg.PANNEL_CLOSE, {name: name});
+        App.EventMgr.emit(EventIDCfg.PANNEL_CLOSE, { name: name });
         tryShowNext && this.tryShowNextUI();
     }
 
@@ -228,30 +229,32 @@ export class UIMgr extends Component {
         let loaded: number = 0;
         let isLoadedError: boolean = false;
         for (let i = 0; i < length; i++) {
-            resources.load(cfg.preloadRes[i].url, cfg.preloadRes[i].type, (errorMes: Error, res: any) => {
-                if (error) {
-                    isLoadedError = true;
-                    error(errorMes.message || error);
-                }
-                loaded++;
-                if (loaded == length) {
-                    const idx = this._loadingIds.indexOf(id);
-                    if (idx != -1) {
-                        this._loadingIds.splice(idx, 1);
-                        if (!isLoadedError) {
-                            if (!this._nodeList[name] || !isValid(this._nodeList[name])) {                                
-                                this._nodeList[name] = instantiate(res);
+            ObjectUtils.loadRes(cfg.preloadRes[i].url, cfg.preloadRes[i].type, {
+                onComplete: (errorMes, res: Prefab) => {
+                    if (errorMes) {
+                        isLoadedError = true;
+                    }
+                    loaded++;
+                    if (loaded == length) {
+                        const idx = this._loadingIds.indexOf(id);
+                        if (idx != -1) {
+                            this._loadingIds.splice(idx, 1);
+                            if (!isLoadedError) {
+                                if (!this._nodeList[name] || !isValid(this._nodeList[name])) {
+                                    this._nodeList[name] = instantiate(res);
+                                }
+                                if (-1 == this._openUINameList.indexOf(name)) {
+                                    return;
+                                }
+                                this.showUI(name, callback, displayId);
                             }
-                            if (-1 == this._openUINameList.indexOf(name)) {
-                                return;
-                            }
-                            this.showUI(name, callback, displayId);
                         }
                     }
                 }
-            });
+            })
         }
     }
+
 
     public clear(): void {
         const uiRoot = find("Canvas/UIRoot");

@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, SpriteFrame, Sprite, tween, Vec2, Vec3, UITransform, v3, UIOpacity, Tween } from 'cc';
 import { App } from '../app/App';
-import { EventIDCfg } from '../frame/EventIDCfg';
+import { EventIDCfg } from '../frame/const/EventIDCfg';
 const { ccclass, property } = _decorator;
 
 @ccclass('CandyPrefab')

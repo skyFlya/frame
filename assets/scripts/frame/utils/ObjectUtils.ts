@@ -1,10 +1,9 @@
 import { _decorator, Component, Node, Asset, AssetManager, assetManager, Sprite, SpriteFrame, Texture2D } from 'cc';
-import { PlayerData } from './PlayerData';
 
 /**
  * 对象工具类
  */
-export const objectUtils = {
+export const ObjectUtils = {
     /**
     * 深拷贝
     * @param Obj 对象
@@ -14,14 +13,14 @@ export const objectUtils = {
         if (Obj instanceof Array) {
             buf = [];
             for (let i = 0; i < Obj.length; i++) {
-                buf[i] = objectUtils.cloneObject(Obj[i]);
+                buf[i] = ObjectUtils.cloneObject(Obj[i]);
             }
 
             return buf;
         } else if (Obj instanceof Object) {
             buf = {};
             for (let k = 0; k < Object.keys(Obj).length; k++) {
-                buf[Object.keys(Obj)[k]] = objectUtils.cloneObject(Obj[Object.keys(Obj)[k]]);
+                buf[Object.keys(Obj)[k]] = ObjectUtils.cloneObject(Obj[Object.keys(Obj)[k]]);
             }
             return buf;
         } else {
