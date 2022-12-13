@@ -75,20 +75,19 @@ export class HttpClientMgr {
         const param = { url: url.url, param: fData, requestType: url.requestType }
 
         //const now = Date.now();
-        let finalData;
-
-        if(window[`isTest`]){
+        let finalData;        
+        if(App.playerDataMgr.isTest){
             if (url == HttpUrl.getVersion) {            
                 finalData = {
                     _token: App.webViewMgr.getToken(),
-                    _sign: window["PHEAD"]._sign,
+                    _sign: App.playerDataMgr.PHEAD._sign,
                 }
             }
             else {
                 finalData = {
                     _token: App.webViewMgr.getToken(),
-                    _sign: window["PHEAD"]._sign,
-                    dv: window["PHEAD"].dv,
+                    _sign: App.playerDataMgr.PHEAD._sign,
+                    dv: App.playerDataMgr.PHEAD.dv,
                 }
             }
         }
@@ -100,7 +99,7 @@ export class HttpClientMgr {
             }
             else {
                 finalData = {                    
-                    dv: window["PHEAD"].dv,
+                    dv: App.playerDataMgr.PHEAD.dv,
                 }
             }
         }
@@ -109,9 +108,9 @@ export class HttpClientMgr {
         Object.assign(finalData, fData);
         finalData = App.webViewMgr.sign(finalData);
 
-        let finalurl = window[`isTest`] ? test[url.type] : real[url.type];
+        let finalurl = App.playerDataMgr.isTest ? test[url.type] : real[url.type];
 
-        if(url.powerTest && window[`isTest`]){
+        if(url.powerTest && App.playerDataMgr.isTest){
             finalurl = url.powerTest;
         }
         else if(url.powerRead){

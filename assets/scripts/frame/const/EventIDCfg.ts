@@ -9,6 +9,9 @@ export const EventIDCfg = {
     PANNEL_CLOSE: "PANNEL_CLOSE",
 
     /**消除糖果 */
-    CANDY_REMOVE: "CANDY_REMOVE"
+    CANDY_REMOVE: "CANDY_REMOVE",
+
+    /**增加金币 */
+    ADD_MONEY: "ADD_MONEY"
 
 }

@@ -31,13 +31,15 @@ export class GameEffect extends Component {
         startPos = this.node.getComponent(UITransform).convertToNodeSpaceAR(startPos);
         this.playCandyMove(startPos);
         this.gotoRed(startPos, delayTime);
+        App.soundMgr.playEffect(SoundCfg.clickButtom)
     }
 
-    gotoRed(startPos:Vec3, delayTime:number){                                    
+    gotoRed(startPos:Vec3, delayTime:number){                                            
         let redPred = App.poolMgr.getNode(this.redPre, this.node);
         redPred.setPosition(startPos);
         tween(redPred).delay(delayTime).to(0.3, {position: this.cashoutRedPos}).call(()=>{
-            App.poolMgr.putNode(redPred);
+            App.soundMgr.playEffect(SoundCfg.addGold)
+            App.poolMgr.putNode(redPred);            
         }).start();
     } 
     

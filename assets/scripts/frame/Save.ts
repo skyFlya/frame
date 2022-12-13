@@ -60,5 +60,19 @@ class SaveConfig {
         default: true
     }
 
+    /**等级弹窗内金钱 */
+    pannleLevelAmount: SaveItemConig = {
+        key: "pannleLevelAmount",
+        type: "number",
+        default: 0
+    }
+
+    /**等级弹窗内已经完成任务 */
+    pannleLevelOkTaskCount: SaveItemConig = {
+        key: "pannleLevelOkTaskCount",
+        type: "number",
+        default: 0
+    }
+
 }
 export const Save: SaveConfig = new SaveConfig();

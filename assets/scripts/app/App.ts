@@ -1,5 +1,6 @@
 import { EventMgr } from "../frame/Mgr/EventMgr";
 import { HttpClientMgr } from "../frame/Mgr/HttpClientMgr";
+import { PlayerDataMgr } from "../frame/Mgr/PlayerDataMgr";
 import { PoolMgr } from "../frame/Mgr/PoolMgr";
 import { SaveMgr } from "../frame/Mgr/SaveMgr";
 import { SoundMgr } from "../frame/Mgr/SoundMgr";
@@ -42,5 +43,9 @@ export class App {
     public static get httpClientMgr(): HttpClientMgr{
         return HttpClientMgr.getInstance();
     }
+
+    public static get playerDataMgr(): PlayerDataMgr{
+        return PlayerDataMgr.getInstance();
+    }    
 
 }

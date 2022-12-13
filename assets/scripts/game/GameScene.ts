@@ -4,6 +4,7 @@ import { CandyPrefab } from './CandyPrefab';
 import { Global } from './Global';
 import { MathUtils } from '../frame/utils/MathUtils';
 import { NodeUtils } from '../frame/utils/NodeUtils';
+import { SoundCfg } from '../frame/const/SoundCfg';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameScene')
@@ -168,24 +169,7 @@ export class GameScene extends Component {
     private clearConnectCandy() {
         let self = this;
         var connectLength = self.sameCandy.connectCandy.length
-        if (connectLength > 1) {
-
-            //音效播放
-            if (connectLength >= 5 && connectLength <= 7) {
-                //Global.playMusic("Clear1");
-                //self.popManage.ImageGoto("img_good", 2, 0);
-            }
-            else if (connectLength >= 8 && connectLength <= 10) {
-                //Global.playMusic("Clear2");
-                //self.popManage.ImageGoto("img_veryGood", 2, 0);
-            }
-            else if (connectLength > 10) {
-                //Global.playMusic("Clear3");
-                //self.popManage.ImageGoto("img_perfect", 2, 0);
-
-                //self.shakePhone();
-                //wxApply.vibrateLong();
-            }
+        if (connectLength > 1) {           
             //Global.playMusic("ClearStart");
 
             var initPosition = self.sameCandy.connectCandy[0]; //分数飘动的初始位置
@@ -212,11 +196,30 @@ export class GameScene extends Component {
                         self.fallLeftStar();
                         //检测本关是否结束
                         setTimeout(() => {
+                            App.playerDataMgr.gold += connectLength * 10;                            
+                            if(connectLength < 5){
+                                App.soundMgr.playEffect(SoundCfg.combo1);
+                            }
+                            else if (connectLength >= 5 && connectLength <= 7) {
+                                App.soundMgr.playEffect(SoundCfg.combo2);
+                            }
+                            else if (connectLength >= 8 && connectLength <= 10) {
+                                App.soundMgr.playEffect(SoundCfg.combo3);
+                            }
+                            else if (connectLength > 10 && connectLength <= 15) {
+                                App.soundMgr.playEffect(SoundCfg.combo4);
+                            }
+                            else if(connectLength > 15){
+                                App.soundMgr.playEffect(SoundCfg.combo5);
+                            }
+
+
+                            
                             if (self.checkOver()) {
                                 self.overCal();
                             }
                             this.noClick = false;
-                        }, 500);
+                        }, 500);                        
                     }, (connectLength - 1) / removeTime + 0.3)
                 }
             }

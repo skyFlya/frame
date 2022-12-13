@@ -43,4 +43,17 @@ export let UICfg = {
         needWait: false,
         zIndex: UIZIndexCfg.DEFAULT,
     },
+
+    /**
+     * 打开等级奖励框
+     */
+    'PannelLevel': {
+        name: 'PannelLevel',
+        preloadRes: [
+            { url: 'common/pannels/PannelLevel', type: Prefab }
+        ],
+        ui: 'common/pannels/PannelLevel',
+        needWait: false,
+        zIndex: UIZIndexCfg.DEFAULT,
+    }
 }
