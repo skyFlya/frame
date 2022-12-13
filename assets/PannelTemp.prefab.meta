@@ -2,12 +2,12 @@
   "ver": "1.1.40",
   "importer": "prefab",
   "imported": true,
-  "uuid": "76819b87-32ae-4f40-91b5-2227c753ced7",
+  "uuid": "64b28f00-221c-4076-8c20-f534a79dfaa1",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "PannelSet"
+    "syncNodeName": "PannelTemp"
   }
 }

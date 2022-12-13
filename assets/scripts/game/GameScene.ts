@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, UITransform, v3, Vec3, CCObject, Sprite, DEFAULT_OCTREE_DEPTH, Layers } from 'cc';
+import { _decorator, Component, Node, Prefab, UITransform, v3, Vec3, CCObject, Sprite, DEFAULT_OCTREE_DEPTH, Layers, Button } from 'cc';
 import { App } from '../app/App';
 import { CandyPrefab } from './CandyPrefab';
 import { Global } from './Global';
