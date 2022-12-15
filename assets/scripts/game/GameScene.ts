@@ -5,6 +5,9 @@ import { Global } from './Global';
 import { MathUtils } from '../frame/utils/MathUtils';
 import { NodeUtils } from '../frame/utils/NodeUtils';
 import { SoundCfg } from '../frame/const/SoundCfg';
+import { ToastMgr } from './ToastMgr';
+import { PlayerDataMgr } from '../frame/Mgr/PlayerDataMgr';
+import { EventIDCfg } from '../frame/const/EventIDCfg';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameScene')
@@ -44,8 +47,9 @@ export class GameScene extends Component {
     private addevent() {
         let self = this;
 
-        this.ndCandyNode.on(Node.EventType.TOUCH_START, self.onClick, self);
+        App.EventMgr.on(EventIDCfg.CLICK_START, this.touchStar, this);
 
+        App.EventMgr.on(EventIDCfg.GAME_START, this.createGrid, this);
     }
 
     update(deltaTime: number) {
@@ -59,10 +63,14 @@ export class GameScene extends Component {
 
     //生成棋盘
     private createGrid() {
+        console.log("游戏开始");
+
         let self = this;
         let candyList = [];
         let gridList = [];
         var gridLength = Global.gridLength;
+
+        this.ndCandyNode.getComponent(UITransform).width = this.ndCandyNode.getComponent(UITransform).height = Global.gridLength * App.playerDataMgr.candySize;
 
         for (let i = 0; i < gridLength; i++) {
             candyList[i] = [];
@@ -92,21 +100,16 @@ export class GameScene extends Component {
         return App.poolMgr.getNode(this.candyPre, this.ndCandyNode);
     }
 
-    //点击
-    private onClick(e) {
+    // 点击了一个糖果，xy为数据坐标
+    private touchStar(x, y) {
         if (this.noClick) return;
         this.noClick = true;
         this.stopGameTip();
 
-        let touchPos = e.touch.getLocation();
-        var pos = MathUtils.worldToNode(new Vec3(touchPos.x, touchPos.y, 0), this.ndCandyNode);
-        this.touchStar(parseInt(String(pos.x / 68)), parseInt(String(pos.y / 68)));
-    }
-
-    // 点击了一个糖果，xy为数据坐标
-    private touchStar(x, y) {
         let self = this;
+
         console.log("点击坐标", "x", y, "y", x)
+        //ToastMgr.getInstance().showToast(`点击坐标,"x", ${y}, "y", ${x}`)
         if (x < Global.gridLength && y < Global.gridLength) {
             if (self.gridList[x][y] != 99) {
                 // 相连的糖果
@@ -115,11 +118,11 @@ export class GameScene extends Component {
                 //消除糖果
                 self.cleanOnce();
             }
-            else{
+            else {
                 this.noClick = false;
             }
         }
-        else{
+        else {
             this.noClick = false;
         }
     }
@@ -169,7 +172,7 @@ export class GameScene extends Component {
     private clearConnectCandy() {
         let self = this;
         var connectLength = self.sameCandy.connectCandy.length
-        if (connectLength > 1) {           
+        if (connectLength > 1) {
             //Global.playMusic("ClearStart");
 
             var initPosition = self.sameCandy.connectCandy[0]; //分数飘动的初始位置
@@ -196,8 +199,8 @@ export class GameScene extends Component {
                         self.fallLeftStar();
                         //检测本关是否结束
                         setTimeout(() => {
-                            App.playerDataMgr.gold += connectLength * 10;                            
-                            if(connectLength < 5){
+                            App.playerDataMgr.gold += connectLength * 10;
+                            if (connectLength < 5) {
                                 App.soundMgr.playEffect(SoundCfg.combo1);
                             }
                             else if (connectLength >= 5 && connectLength <= 7) {
@@ -209,17 +212,17 @@ export class GameScene extends Component {
                             else if (connectLength > 10 && connectLength <= 15) {
                                 App.soundMgr.playEffect(SoundCfg.combo4);
                             }
-                            else if(connectLength > 15){
+                            else if (connectLength > 15) {
                                 App.soundMgr.playEffect(SoundCfg.combo5);
                             }
 
 
-                            
+
                             if (self.checkOver()) {
                                 self.overCal();
                             }
                             this.noClick = false;
-                        }, 500);                        
+                        }, 500);
                     }, (connectLength - 1) / removeTime + 0.3)
                 }
             }
@@ -297,7 +300,7 @@ export class GameScene extends Component {
     //游戏提示
     private gameTip() {
         let self = this;
-        let pos = this.checkGameCandy(true);        
+        let pos = this.checkGameCandy(true);
         if (pos) {
             self.sameCandy.connectCandy = [[pos.x, pos.y]];
             self.checkStar(pos.x, pos.y);
@@ -402,8 +405,7 @@ export class GameScene extends Component {
                     star.clear(0.4 * 10);
                     if (i == remainStartLength - 1) {
                         setTimeout(() => {
-                            //Global.playMusic("ClearStart");
-                            //self.scoreManage.goToAllScore(0, 0);                            
+                            App.EventMgr.emit(EventIDCfg.GAME_OVER)
                         }, 4000)
                     }
                 }
@@ -412,7 +414,7 @@ export class GameScene extends Component {
                     allScore = 2000 - i * i * 20;
                     if (i == remainStartLength - 1) {
                         setTimeout(() => {
-                            // self.scoreManage.goToAllScore(0, allScore);
+                            App.EventMgr.emit(EventIDCfg.GAME_OVER)
                         }, 400 * i);
                     }
                     else {
@@ -422,7 +424,7 @@ export class GameScene extends Component {
             }
         }
         else {
-            // self.scoreManage.goToAllScore(0, allScore);
+            App.EventMgr.emit(EventIDCfg.GAME_OVER)
         }
     }
 

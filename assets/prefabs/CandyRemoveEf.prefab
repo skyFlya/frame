@@ -61,7 +61,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "SpriteSplash",
+    "_name": "bones",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -120,8 +120,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 20,
-      "height": 20
+      "width": 150,
+      "height": 150
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -132,10 +132,10 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "812NL3wmNDvI9PC2zajzSA"
+    "fileId": "de0l1FDm1Ap6bFJeFWehBG"
   },
   {
-    "__type__": "cc.Sprite",
+    "__type__": "dragonBones.ArmatureDisplay",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -150,33 +150,36 @@
     "_dstBlendFactor": 4,
     "_color": {
       "__type__": "cc.Color",
-      "r": 230,
-      "g": 158,
-      "b": 158,
+      "r": 255,
+      "g": 255,
+      "b": 255,
       "a": 255
     },
-    "_spriteFrame": {
-      "__uuid__": "7d8f9b89-4fd1-4c9f-a3ab-38ec7cded7ca@f9941",
-      "__expectedType__": "cc.SpriteFrame"
+    "playTimes": -1,
+    "premultipliedAlpha": false,
+    "_defaultArmatureIndexValue": 0,
+    "_dragonAsset": {
+      "__uuid__": "51e221aa-72fe-4c7d-9120-e06dae336376",
+      "__expectedType__": "dragonBones.DragonBonesAsset"
     },
-    "_type": 0,
-    "_fillType": 0,
-    "_sizeMode": 0,
-    "_fillCenter": {
-      "__type__": "cc.Vec2",
-      "x": 0,
-      "y": 0
+    "_dragonAtlasAsset": {
+      "__uuid__": "54d94add-11af-4aff-bbdd-007e4e905151",
+      "__expectedType__": "dragonBones.DragonBonesAtlasAsset"
     },
-    "_fillStart": 0,
-    "_fillRange": 0,
-    "_isTrimmedMode": true,
-    "_useGrayscale": false,
-    "_atlas": null,
+    "_armatureName": "Sprite",
+    "_animationName": "",
+    "_animationIndexValue": 0,
+    "_defaultCacheModeValue": 0,
+    "_timeScale": 1,
+    "_playTimes": -1,
+    "_debugBones": false,
+    "_enableBatch": false,
+    "_sockets": [],
     "_id": ""
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "5f7cfDkxZPIJ8O2p0wcZPV"
+    "fileId": "05iEwVtetIu4OtZYm7qpm4"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -186,7 +189,7 @@
     "asset": {
       "__id__": 0
     },
-    "fileId": "c8UjIWWldCo4yxKCwx7nTE"
+    "fileId": "532+mr4xJMq6EYK0bFO+2Q"
   },
   {
     "__type__": "cc.UITransform",

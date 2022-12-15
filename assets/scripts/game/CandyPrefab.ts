@@ -1,6 +1,8 @@
 import { _decorator, Component, Node, SpriteFrame, Sprite, tween, Vec2, Vec3, UITransform, v3, UIOpacity, Tween } from 'cc';
 import { App } from '../app/App';
 import { EventIDCfg } from '../frame/const/EventIDCfg';
+import { PlayerDataMgr } from '../frame/Mgr/PlayerDataMgr';
+import { MathUtils } from '../frame/utils/MathUtils';
 const { ccclass, property } = _decorator;
 
 @ccclass('CandyPrefab')
@@ -19,8 +21,21 @@ export class CandyPrefab extends Component {
 
     private candySize;
 
+    private posX;
+    private posY;
+
     onLoad() {
-        this.candySize = this.iconFrame[0].width
+        this.candySize = this.iconFrame[0].width;
+        if(App.playerDataMgr.candySize != this.candySize){
+            App.playerDataMgr.candySize = this.candySize;
+        }
+
+        this.node.on(Node.EventType.TOUCH_START, this.onClick, this);
+    }
+
+    onClick(e){
+       console.log(this.posX + "|" + this.posY)
+       App.EventMgr.emit(EventIDCfg.CLICK_START, this.posX, this.posY);
     }
 
     start() {
@@ -61,7 +76,7 @@ export class CandyPrefab extends Component {
 
         tween(this.node).delay(delay1).call(() => {
             App.EventMgr.emit(EventIDCfg.CANDY_REMOVE, this.node.getComponent(UITransform).convertToWorldSpaceAR(v3(0, 0, 0)), delay2);
-            this.node.destroy();
+            App.poolMgr.putNode(this.node);
         }).start();
     }
 
@@ -86,6 +101,8 @@ export class CandyPrefab extends Component {
 
     //根据x,y获取位置
     public getPos(x, y): Vec3 {
+        this.posX = x;
+        this.posY = y;
         return new Vec3(x * this.candySize + this.candySize / 2, y * this.candySize + this.candySize / 2)
     }
 

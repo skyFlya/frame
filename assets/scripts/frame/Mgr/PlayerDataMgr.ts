@@ -37,6 +37,9 @@ export class PlayerDataMgr extends Component {
     }
 
 
+    public candySize = 72;
+
+
     public _gold = 0;
     
     public set gold(amount : number) {
