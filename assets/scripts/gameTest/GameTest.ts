@@ -1,6 +1,7 @@
 import { _decorator, Component, Node, Label, Button } from 'cc';
 import { App } from '../app/App';
 import { EventIDCfg } from '../frame/const/EventIDCfg';
+import { UICfg } from '../frame/const/UICfg';
 import { NodeUtils } from '../frame/utils/NodeUtils';
 const { ccclass, property } = _decorator;
 
@@ -27,8 +28,8 @@ export class GameTest extends Component {
         App.EventMgr.on(EventIDCfg.CANDY_REMOVE, this.candyRemove, this)    
     }
 
-    start() {
-
+    start() {        
+        
     }
 
     candyRemove(){
@@ -53,6 +54,10 @@ export class GameTest extends Component {
             this.updateData();
             this.ndPassUI.active = false;
         }, 2000);
+    }
+
+    btnSetOnClick(){        
+        App.uiMgr.openUI(UICfg.PannelSet.name);
     }
 
 }

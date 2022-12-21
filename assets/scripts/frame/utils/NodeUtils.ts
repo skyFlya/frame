@@ -1,4 +1,5 @@
 import { _decorator, Component, Node, error, Label, Sprite, sp, ProgressBar, EditBox, Button, RichText } from 'cc';
+import { UIUtils } from '../UIUtils';
 /**
  * 节点工具类
  */
@@ -64,9 +65,9 @@ export const NodeUtils = {
     autoBindButton(node, context) {
         let name = node.name
         if (context[`${name}OnClick`]) {
-            // ButtonUtils.btnEvent(node, () => {
-            //     context[`${name}OnClick`]()
-            // })
+            UIUtils.addClickEvent(node, () => {                
+                context[`${name}OnClick`]()
+            }, this, 0.2);
         }
     }
 

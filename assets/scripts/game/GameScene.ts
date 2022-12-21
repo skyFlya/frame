@@ -45,8 +45,7 @@ export class GameScene extends Component {
     }
 
     private addevent() {
-        let self = this;
-
+        let self = this;        
         App.EventMgr.on(EventIDCfg.CLICK_START, this.touchStar, this);
 
         App.EventMgr.on(EventIDCfg.GAME_START, this.createGrid, this);
